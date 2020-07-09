@@ -1,6 +1,6 @@
 # phonebook
 
-A new Flutter application.
+![](phonebook.gif)
 
 ## Getting Started
 
