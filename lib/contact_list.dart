@@ -54,7 +54,8 @@ class _ContactListState extends State<ContactList> {
             contactnumber: contactNumber,
             id: curUserId,
             address: address,
-            name: name);
+            name: name,
+            email: email);
         dbHelper.update(c);
         setState(() {
           isUpdating = false;
@@ -64,7 +65,8 @@ class _ContactListState extends State<ContactList> {
             id: null,
             contactnumber: contactNumber,
             address: address,
-            name: name);
+            name: name,
+            email: email);
         dbHelper.save(c);
         clearName();
       }
