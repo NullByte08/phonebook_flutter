@@ -11,6 +11,7 @@ class DBHelper {
   static const String ID = 'id';
   static const String NAME = 'name';
   static const String ADDRESS = 'address';
+  static const String EMAIL = 'email';
   static const String CONTACTNUMBER = 'contactnumber';
   static const String TABLENAME = 'Contact';
   static const String DB_NAME = 'contact.db';
@@ -37,7 +38,7 @@ class DBHelper {
 
   _onCreate(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE $TABLENAME ($ID INTEGER PRIMARY KEY, $NAME TEXT, $CONTACTNUMBER NUMBER, $ADDRESS TEXT)");
+        "CREATE TABLE $TABLENAME ($ID INTEGER PRIMARY KEY, $NAME TEXT, $CONTACTNUMBER NUMBER, $ADDRESS TEXT, $EMAIL TEXT)");
   }
 
   Future<Contact> save(Contact contact) async {
@@ -53,7 +54,7 @@ class DBHelper {
   Future<List<Contact>> getContacts() async {
     var dbClient = await db;
     List<Map> maps = await dbClient
-        .query(TABLENAME, columns: [ID, NAME, ADDRESS, CONTACTNUMBER]);
+        .query(TABLENAME, columns: [ID, NAME, ADDRESS, CONTACTNUMBER, EMAIL]);
     List<Contact> contacts = [];
     if (maps.length > 0) {
       for (int i = 0; i < maps.length; i++) {

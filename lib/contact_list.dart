@@ -15,10 +15,12 @@ class _ContactListState extends State<ContactList> {
   Future<List<Contact>> contacts;
   TextEditingController controller = TextEditingController();
   TextEditingController controller2 = TextEditingController();
+  TextEditingController controller3 = TextEditingController();
   String name;
   int curUserId;
   int contactNumber;
   String address;
+  String email;
 
   final formKey = new GlobalKey<FormState>();
   var dbHelper;
@@ -41,6 +43,7 @@ class _ContactListState extends State<ContactList> {
   clearName() {
     controller.text = '';
     controller2.text = '';
+    controller3.text = '';
   }
 
   validate() {
@@ -69,6 +72,24 @@ class _ContactListState extends State<ContactList> {
     }
   }
 
+  String validatePhoneNumber(String value) {
+    if (value.length != 10)
+      return 'Invalid Number';
+    else
+      return null;
+  }
+
+  String validateEmail(String email) {
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+    if (emailValid) {
+      return null;
+    } else {
+      return 'Invalid Email';
+    }
+  }
+
   form() {
     return Form(
       key: formKey,
@@ -88,10 +109,17 @@ class _ContactListState extends State<ContactList> {
             ),
             TextFormField(
               controller: controller2,
-              keyboardType: TextInputType.text,
+              keyboardType: TextInputType.phone,
               decoration: InputDecoration(labelText: 'Phone Number'),
-              validator: (val) => val.length == 0 ? 'Enter Number' : null,
+              validator: validatePhoneNumber,
               onSaved: (val) => contactNumber = int.parse(val),
+            ),
+            TextFormField(
+              controller: controller3,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(labelText: 'Email'),
+              validator: validateEmail,
+              onSaved: (val) => email = val,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,6 +154,7 @@ class _ContactListState extends State<ContactList> {
         columns: [
           DataColumn(label: Text('NAME')),
           DataColumn(label: Text('PHONE')),
+          DataColumn(label: Text('EMAIL')),
           DataColumn(
             label: Text('DELETE'),
           )
@@ -159,6 +188,29 @@ class _ContactListState extends State<ContactList> {
                   ),
                   DataCell(
                     Text(contact.contactnumber.toString()),
+                    onTap: () {
+                      setState(() {
+                        //isUpdating = true;
+                        curUserId = contact.id;
+                      });
+                      /*controller.text = contact.name;
+                      controller2.text = contact.contactnumber.toString();*/
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ContactDetails(
+                                    curUserId: curUserId,
+                                    name: contact.name,
+                                    number: contact.contactnumber,
+                                  ))).then((value) {
+                        setState(() {
+                          refreshList();
+                        });
+                      });
+                    },
+                  ),
+                  DataCell(
+                    Text(contact.email),
                     onTap: () {
                       setState(() {
                         //isUpdating = true;

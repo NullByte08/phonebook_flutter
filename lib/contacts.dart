@@ -3,14 +3,16 @@ class Contact {
   String name;
   String address;
   int id;
+  String email;
 
-  Contact({this.contactnumber, this.address, this.id, this.name});
+  Contact({this.contactnumber, this.address, this.id, this.name, this.email});
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       'id': id,
       'name': name,
       'address': address,
-      'contactnumber': contactnumber
+      'contactnumber': contactnumber,
+      'email': email
     };
     return map;
   }
@@ -20,5 +22,6 @@ class Contact {
     name = map['name'];
     address = map['address'];
     contactnumber = map['contactnumber'];
+    email = map['email'];
   }
 }
